@@ -3,28 +3,14 @@ import Node from './Node';
 import {Dijkstra, getShortestDijkstraPath} from './Pathfinding Algorithms/Dijkstra';
 import {AStar, getShortestAStarPath} from './Pathfinding Algorithms/AStar';
 import {WeightedAStar, getShortestWeightedAStarPath} from './Pathfinding Algorithms/WeightedAStar';
-import {BidirectionalAStar, getForwardBidrectionalAStarPath, getBackwardBidirectionalAstartPath} from './Pathfinding Algorithms/BidirectionalAStar';
+import {BidirectionalAStar, getForwardBidrectionalAStarPath, getBackwardBidirectionalAStarPath} from './Pathfinding Algorithms/BidirectionalAStar';
 import {IterativeDFS, getShortestIterativeDFSPath} from './Pathfinding Algorithms/IterativeDFS';
 import { RecursiveDFS, getShortestRecursiveDFSPath } from './Pathfinding Algorithms/RecursiveDFS';
 import {IterativeBFS, getShortestBFSPath} from './Pathfinding Algorithms/IterativeBFS';
+import {BidirectionalBFS, getForwardBidrectionalBFSPath, getBackwardBidirectionalBFSPath} from './Pathfinding Algorithms/BidirectionalBFS';
 import {GreedyBFS, getShortestGreedyBFSPath} from './Pathfinding Algorithms/GreedyBFS';
 
 import './PathfindingVisualizers.css';
-
-/*
-let rowAmount = 20;
-let columnAmount = 50;
-
-let startNodeRow = rowAmount - (rowAmount - 10); // Start at 10
-let startNodeColumn = columnAmount - (columnAmount - 4); // Start at 4
-let endNodeRow = rowAmount - (rowAmount - 10); // Start at 10
-let endNodeColumn = columnAmount - (columnAmount - 45); // Start at 45
-
-const defaultStartNodeRow = rowAmount - (rowAmount - 10); // Start at 10
-const defaultStartNodeColumn = columnAmount - (columnAmount - 4); // Start at 4
-const defaultEndNodeRow = rowAmount - (rowAmount - 10); // Start at 10
-const defaultEndNodeColumn = columnAmount - (columnAmount - 45); // Start at 45
-*/
 
 let rowAmount = 40;
 let columnAmount = 100;
@@ -95,7 +81,9 @@ export default class PathfindingVisualizers extends Component {
             gValue: 0,
             hValue: 0,
             forwardNode: null,
-            backWardNode: null,
+            backwardNode: null,
+            forwardVisited: false,
+            backwardVisited: false,
         };
     }
 
@@ -399,15 +387,18 @@ export default class PathfindingVisualizers extends Component {
 
     // Handle when the user presses the mouse button
     handleMouseDown(grid, row, column) {
-        if (row === startNodeRow && column === startNodeColumn) { // If the selected node is the startNode
+        // If the selected node is the start node
+        if (grid[row][column] === grid[startNodeRow][startNodeColumn]) { 
             const newGrid = this.getNewStartNodeGrid(grid, row, column);
             this.setState({grid: newGrid, mouseMoveStartNode: true});
         }
-        if (row === endNodeRow && column === endNodeColumn) { // If the selected node is the endNode
+        // If the selected node is the end node
+        if (grid[row][column] === grid[endNodeRow][endNodeColumn]) { 
             const newGrid = this.getNewEndNodeGrid(grid, row, column);
             this.setState({grid: newGrid, mouseMoveEndNode: true});
         }
-        if (row !== startNodeRow && row !== endNodeRow && column !== startNodeColumn && column !== endNodeColumn) { // If the selected node is neither the startNode nor the endNode   
+        // If the selected node is neither the start node nor the end node 
+        if (grid[row][column] !== grid[startNodeRow][startNodeColumn] && grid[row][column] !== grid[endNodeRow][endNodeColumn]) {
             const newGrid = this.getNewGridWithWallsOn(this.state.grid, row, column);
             this.setState({grid: newGrid, mouseIsPressed: true});
         }
@@ -445,7 +436,7 @@ export default class PathfindingVisualizers extends Component {
                 const node = nodesVisitedInOrder[i];
                 document.getElementById(`node-${node.row}-${node.column}`).className = 'node node-visited';
             }, i * 10);
-        }
+        } 
     }
 
     visualizeDijkstraAlgorithm() {
@@ -521,6 +512,7 @@ export default class PathfindingVisualizers extends Component {
 
     // Visualize Weighted A* Algorithm
     visualizeWeightedAStarAlgorithm() {
+        
         const {grid} = this.state;
         const startNode = grid[startNodeRow][startNodeColumn];
         const endNode = grid[endNodeRow][endNodeColumn];
@@ -592,12 +584,28 @@ export default class PathfindingVisualizers extends Component {
 
         const currentOne = result.currentOne;
         const currentTwo = result.currentTwo;
+        const currentPath = result.currentPath;
 
-        const shortestPathForward = getForwardBidrectionalAStarPath(currentOne);
-        const shortestPathBackward = getBackwardBidirectionalAstartPath(currentTwo);
+        let shortestPathOne;
+        let shortestPathTwo;
+
+        if (currentPath === 'one') {
+            shortestPathOne = getForwardBidrectionalAStarPath(currentOne);
+            shortestPathTwo = getBackwardBidirectionalAStarPath(currentOne);
+        }
+
+        if (currentPath === 'two') {
+            shortestPathOne = getForwardBidrectionalAStarPath(currentTwo);
+            shortestPathTwo = getBackwardBidirectionalAStarPath(currentTwo);
+        }
+
+        if (currentPath === 'none') {
+            shortestPathOne = getForwardBidrectionalAStarPath(currentOne);
+            shortestPathTwo = getBackwardBidirectionalAStarPath(currentTwo);
+        }
         
-        this.animateBidirectionalAStarOne(closedSetOne, openSetOneHistory, shortestPathForward);
-        this.animateBidirectionalAStarTwo(closedSetTwo, openSetTwoHistory, shortestPathBackward);
+        this.animateBidirectionalAStarOne(closedSetOne, openSetOneHistory, shortestPathOne);
+        this.animateBidirectionalAStarTwo(closedSetTwo, openSetTwoHistory, shortestPathTwo);
     }
 
     // ------------------------------------------------------------------------------------------------------
@@ -706,6 +714,76 @@ export default class PathfindingVisualizers extends Component {
 
     // ------------------------------------------------------------------------------------------------------
 
+    // Animate Forward Search of Bidirectional BFS Algorithm
+    animateBidirectionalBFSOne(queueOneHistory, shortestPathOne) {
+        for (let i = 0; i <= queueOneHistory.length; i++) {
+            if (i === queueOneHistory.length) {
+                setTimeout(() => {
+                    this.animateShortestPath(shortestPathOne);
+                }, i * 10);
+                return;
+            }
+            setTimeout(() => {
+                const node = queueOneHistory[i];
+                document.getElementById(`node-${node.row}-${node.column}`).className = 'node node-visited';
+            }, i * 10);
+        }
+    }
+
+    // Animate Backward Search of Bidirectional BFS Algorithm
+    animateBidirectionalBFSTwo(queueTwoHistory, shortestPathTwo) {
+        for (let i = 0; i <= queueTwoHistory.length; i++) {
+            if (i === queueTwoHistory.length) {
+                setTimeout(() => {
+                    this.animateShortestPath(shortestPathTwo);
+                }, i * 10);
+                return;
+            }
+            setTimeout(() => {
+                const node = queueTwoHistory[i];
+                document.getElementById(`node-${node.row}-${node.column}`).className = 'node node-visited';
+            }, i * 10);
+        }
+    }
+
+    // Visualize Bidirectional BFS Algorithm
+    visualizeBidirectionalBFSAlgorithm() {
+        const {grid} = this.state;
+        const startNode = grid[startNodeRow][startNodeColumn];
+        const endNode = grid[endNodeRow][endNodeColumn];
+        const result = BidirectionalBFS(grid, startNode, endNode);
+
+        const queueOneHistory = result.queueOneHistory;
+        const queueTwoHistory = result.queueTwoHistory;
+
+        const currentOne = result.currentOne;
+        const currentTwo = result.currentTwo;
+        const currentPath = result.currentPath;
+
+        let shortestPathOne;
+        let shortestPathTwo;
+        
+        if (currentPath === 'one') {
+            shortestPathOne = getForwardBidrectionalBFSPath(currentOne);
+            shortestPathTwo = getBackwardBidirectionalBFSPath(currentOne);
+        }
+
+        if (currentPath === 'two') {
+            shortestPathOne = getForwardBidrectionalBFSPath(currentTwo);
+            shortestPathTwo = getBackwardBidirectionalBFSPath(currentTwo);
+        }
+
+        if (currentPath === 'none') {
+            shortestPathOne = getForwardBidrectionalBFSPath(currentOne);
+            shortestPathTwo = getBackwardBidirectionalBFSPath(currentTwo);
+        }
+
+        this.animateBidirectionalBFSOne(queueOneHistory, shortestPathOne);
+        this.animateBidirectionalBFSTwo(queueTwoHistory, shortestPathTwo);
+    }
+
+    // ------------------------------------------------------------------------------------------------------
+
     // Animate Greedy BFS Algorithm
     animateGreedyBFS(greedyBFSClosedSet, greedyBFSOpenSetHistory, shortestGreedyBFSPath) {
         for (let i = 0; i <= greedyBFSOpenSetHistory.length; i++) {
@@ -749,17 +827,18 @@ export default class PathfindingVisualizers extends Component {
         return (
             <div>  
                 <div className = 'visualizer-buttons'>
-                    <button className = 'dijkstra-button' onClick = {() => this.visualizeDijkstraAlgorithm()}>Dijkstra's Algorithm</button>
-                    <button className = 'astar-button' onClick = {() => this.visualizeAStarAlgorithm()}>A* Algorithm</button>
-                    <button className = 'weighted-astar-button' onClick = {() => this.visualizeWeightedAStarAlgorithm()}>Weighted A* Algorithm</button>
-                    <button className = 'bidirectional-astar-button' onClick = {() => this.visualizeBidirectionalAStarAlgorithm()}>Bidirectional A* Algorithm</button>
-                    <button className = 'recursive-dfs-button' onClick = {() => this.visualizeRecursiveDFSAlgorithm()}>Recursive DFS Algorithm</button>
-                    <button className = 'iterative-dfs-button' onClick = {() => this.visualizeIterativeDFSAlgorithm()}>Iterative DFS Algorithm</button>
-                    <button className = 'iterative-bfs-button' onClick = {() => this.visualizeIterativeBFSAlgorithm()}>Iterative BFS Algorithm</button>
-                    <button className = 'greedy-bfs-button' onClick = {() => this.visualizeGreedyBFSAlgorithm()}>Greedy BFS Algorithm</button>
-                    <button className = 'maze-button' onClick = {() => this.recursiveDivisionMaze(grid)}>Generate Maze</button>
-                    <button className = 'walls-button' onClick = {() => this.addWalls(grid)}>Add Random Walls</button>
-                    <button className = 'reset-button' onClick = {() => this.resetGrid()}>Reset Grid</button>
+                    <button className = 'button' onClick = {() => this.visualizeDijkstraAlgorithm()}>Dijkstra's Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeAStarAlgorithm()}>A* Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeWeightedAStarAlgorithm()}>Weighted A* Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeBidirectionalAStarAlgorithm()}>Bidirectional A* Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeRecursiveDFSAlgorithm()}>Recursive DFS Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeIterativeDFSAlgorithm()}>Iterative DFS Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeIterativeBFSAlgorithm()}>Iterative BFS Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeBidirectionalBFSAlgorithm()}>Bidirectional BFS Algorithm</button>
+                    <button className = 'button' onClick = {() => this.visualizeGreedyBFSAlgorithm()}>Greedy BFS Algorithm</button>
+                    <button className = 'button' onClick = {() => this.recursiveDivisionMaze(grid)}>Generate Maze</button>
+                    <button className = 'button' onClick = {() => this.addWalls(grid)}>Add Walls</button>
+                    <button className = 'button' onClick = {() => this.resetGrid()}>Reset Grid</button>
                 </div>
                 <div className = 'grid'>
                     {grid.map((row, rowIndex) => {
@@ -788,7 +867,7 @@ export default class PathfindingVisualizers extends Component {
                     })}
                 </div>
                 <div className = 'link-buttons'>
-                    <button className = 'name-button' onClick = {() => this.openLink()}>Ryan Vales </button>
+                    <button className = 'button' onClick = {() => this.openLink()}>Ryan Vales </button>
                 </div>
             </div>
         );

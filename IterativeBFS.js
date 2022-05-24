@@ -23,7 +23,7 @@ export const IterativeBFS = (grid, startNode, endNode) => {
         
         // For every neighbor
         for (const neighbor of neighbors) {
-            // If the current node has not been marked as visited
+            // If this neighbor has not been marked as visited
             if (neighbor.hasBeenVisited === false) { 
                 // If this neighbor is a wall
                 if (neighbor.isAWall) { 
@@ -35,14 +35,14 @@ export const IterativeBFS = (grid, startNode, endNode) => {
                     neighbor.previousNode = currentNode; // Make the current node the parent of this neigbor
                 }
                 
-                // Mark the current node as visited and add it to the queue
+                // Mark this neighbor as visited and add it to the queue
                 neighbor.hasBeenVisited = true;
                 
                 // Push this neighbor to the queue
                 queue.push(neighbor);
                 queueHistory.push(neighbor);
 
-                // If the current node is the end node
+                // If this neighbor is the end node
                 if (neighbor === endNode) {
                     return queueHistory; // Return the queue history
                 } 
@@ -93,7 +93,5 @@ const getBFSNeighbors = (grid, node) => {
         neighbors.push(grid[row + 1][column + 1]); // Push bottom right neighbor to neighbors
     }
 
-    return (
-        neighbors.filter(neighbor => !neighbor.hasBeenVisited) // Return each neighbor in neighbors that has not been visited
-    );
+    return neighbors;
 };

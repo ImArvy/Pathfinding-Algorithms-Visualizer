@@ -6,9 +6,11 @@
     margin-top: 50px;
 }
 
-.dijkstra-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
+.visualizer-buttons button {
+    font-family:Arial, Helvetica, sans-serif;
+    background-color: rgba(0, 200, 255, 1.0);
+    color:rgba(255, 255, 255, 1.0);
+    font-weight: bold;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -17,259 +19,29 @@
     width: 150px;
     height:50px;
     border-radius: 25px;
-    color: rgba(0, 0, 0, 1);
+    /*border: 1px solid rgba(0, 0, 0, 0.5);*/
 }
 
-.dijkstra-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
+.visualizer-buttons button:hover{
+    background-color: rgba(0, 200, 255, 0.75);
     cursor: pointer;
 }
 
-.dijkstra-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.astar-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.astar-button:hover {
+.visualizer-buttons button:active {
     background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
+    transform: translateY(2px);
 }
 
-.astar-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.weighted-astar-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.weighted-astar-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.weighted-astar-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.bidirectional-astar-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.bidirectional-astar-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.bidirectional-astar-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.iterative-dfs-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.iterative-dfs-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.iterative-dfs-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.recursive-dfs-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.recursive-dfs-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.recursive-dfs-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.iterative-bfs-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.iterative-bfs-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.iterative-bfs-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.greedy-bfs-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.greedy-bfs-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.greedy-bfs-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.maze-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.maze-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.maze-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.walls-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.walls-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.walls-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-.reset-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    width: 150px;
-    height:50px;
-    border-radius: 25px;
-}
-
-.reset-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
-    cursor: pointer;
-}
-
-.reset-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
-}
-
-/*
-For grid with 20 rows and 50 columns
-margin: 100px;
- */
 .grid {
+    background-color: rgba(255, 255, 255, 1.0);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
-    margin: 50px;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 1700px;
 }
 
 .link-buttons {
@@ -280,9 +52,15 @@ margin: 100px;
     margin-top: -10px;
 }
 
-.name-button {
-    background-color: rgba(0, 255, 200, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.5);
+start-node {
+    background-color: rgba(0, 255, 0, 1.0);
+}
+
+.link-buttons button {
+    font-family:Arial, Helvetica, sans-serif;
+    background-color: rgba(0, 200, 255, 1.0);
+    color:rgba(255, 255, 255, 1.0);
+    font-weight: bold;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -290,14 +68,15 @@ margin: 100px;
     width: 150px;
     height:50px;
     border-radius: 25px;
+    /*border: 1px solid rgba(0, 0, 0, 0.5);*/
 }
 
-.name-button:hover {
-    background-color: rgba(0, 200, 255, 0.5);
+.link-buttons button:hover {
+    background-color: rgba(0, 200, 255, 0.75);
     cursor: pointer;
 }
 
-.name-button:active {
-    background-color: rgba(0, 200, 255, 1);
-    transform: translateY(1px);
+.link-buttons button:active {
+    background-color: rgba(0, 200, 255, 0.5);
+    transform: translateY(2px);
 }

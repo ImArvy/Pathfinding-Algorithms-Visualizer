@@ -39,15 +39,15 @@ export const AStar = (grid, startNode, endNode) => {
             if (closedSet.includes(neighbor) === false) { 
                 // If this neighbor is the end node
                 if (neighbor === endNode) {
-                    // Push this neighbor to the closed set
-                    closedSet.push(neighbor);
+                    // Make the current node the parent node of this neighbor
+                    neighbor.previousNode = currentNode; 
                     
                     // Push this neighbor to the open set
                     openSet.push(neighbor);
                     openSetHistory.push(neighbor);
-                    
-                    // Make the current node the parent node of this neighbor
-                    neighbor.previousNode = currentNode; 
+
+                    // Push this neighbor to the closed set
+                    closedSet.push(neighbor);
 
                     // Return the closed and open sets
                     return {closedSet, openSetHistory}; 
@@ -83,6 +83,22 @@ export const AStar = (grid, startNode, endNode) => {
                     neighbor.hValue = heuristicFunction(neighbor, endNode); // Compute the neighbor's hValue
                     neighbor.fValue = neighbor.gValue + neighbor.hValue; // Compute the neighbor's fValue
                     neighbor.previousNode = currentNode; // Make the current node the parent node of this neighbor
+                }
+
+                // If this neighbor is the end node
+                if (neighbor === endNode) {
+                    // Make the current node the parent node of this neighbor
+                    neighbor.previousNode = currentNode; 
+                    
+                    // Push this neighbor to the open set
+                    openSet.push(neighbor);
+                    openSetHistory.push(neighbor);
+
+                    // Push this neighbor to the closed set
+                    closedSet.push(neighbor);
+
+                    // Return the closed and open sets
+                    return {closedSet, openSetHistory}; 
                 }
             }
         }

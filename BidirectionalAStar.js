@@ -1,17 +1,20 @@
 // This is the front-to-front variation of the Bidirectional A* Algorithm
 export const BidirectionalAStar = (grid, startNode, endNode) => {
-    // Initialize the open set and closedSet
+    // Initialize the first and second open sets
     const openSetStart = [];
     const openSetEnd = [];
     
+    // Initialize the first and second closed sets
     const closedSetStart = [];
     const closedSetEnd = [];
     
+    // Initialize the open set histories
     const openSetStartHistory = [];
     const openSetEndHistory = [];
 
-    let currentOne = null;
-    let currentTwo = null;
+    let currentOne;
+    let currentTwo;
+    let currentPath = 'none';
 
     // Push the starting node to the first open set and leave its f at zero
     openSetStart.push(startNode); 
@@ -53,9 +56,16 @@ export const BidirectionalAStar = (grid, startNode, endNode) => {
         openSetEnd.splice(currentIndexTwo, 1);
         closedSetEnd.push(currentTwo);
 
-        // If the two current nodes are in the same postion
-        if (currentOne === currentTwo) {
-            return {closedSetStart, openSetStartHistory, closedSetEnd, openSetEndHistory, currentOne, currentTwo}; // Return
+        // If the first current node is the intersection of the two searches
+        if (currentOne.forwardVisited && currentOne.backwardVisited) {
+            currentPath = 'one';
+            return {closedSetStart, openSetStartHistory, closedSetEnd, openSetEndHistory, currentOne, currentTwo, currentPath};
+        }
+
+        // If the second current node is the intersection of the two searches
+        if (currentTwo.forwardVisited && currentTwo.backwardVisited) {
+            currentPath = 'two';
+            return {closedSetStart, openSetStartHistory, closedSetEnd, openSetEndHistory, currentOne, currentTwo, currentPath};
         }
 
         //-----------------------------------------------------------------------------------------------------------------------
@@ -69,10 +79,10 @@ export const BidirectionalAStar = (grid, startNode, endNode) => {
         //-----------------------------------------------------------------------------------------------------------------------
 
         for (const neighborOne of neighborsOne) { // For each neighbor in the first set of neighbors
-            for (const neighborTwo of neighborsTwo) { // For each neighbor in the secon set of neighbors
+            for (const neighborTwo of neighborsTwo) { // For each neighbor in the second set of neighbors
                 let newForwardPathFound = false;
                 let newBackwardPathFound = false;
-
+                
                 // FORWARD SEARCH
                 if (closedSetStart.includes(neighborOne) === false && neighborOne.isAWall === false) { // If the neighbor is not in the first closed set
                     let tempGOne = currentOne.gValue + heuristicFunction(neighborOne, currentOne); // Set the temporary gValue
@@ -111,26 +121,34 @@ export const BidirectionalAStar = (grid, startNode, endNode) => {
                     }
                 }
 
-                // If we do have a better forward and backward path
+                // If we do have a better forward path
                 if (newForwardPathFound === true) {
-                    neighborOne.hValue = heuristicFunction(neighborOne, neighborTwo); // Compute the neighbor's hValue
+                    // Compute the h and f values of this first neighbor and make the first current node the parent of said neighbor
+                    neighborOne.hValue = heuristicFunction(neighborOne, neighborTwo); 
                     neighborOne.fValue = neighborOne.gValue + neighborOne.hValue + neighborTwo.gValue; 
-                    neighborOne.forwardNode = currentOne; // Make the current node the parent node of this neighbor
+                    neighborOne.forwardNode = currentOne; 
+
+                    // Mark this first neighbor as visited by the forward search
+                    neighborOne.forwardVisited = true;
                 }
 
                 // If we do have a better backward path
-                if (newBackwardPathFound) {
-                    neighborTwo.hValue = heuristicFunction(neighborOne, neighborTwo); // Compute the neighbor's hValue
+                if (newBackwardPathFound === true) {
+                    // Compute the h and f values of this second neighbor and make the second current node the parent of said neighbor
+                    neighborTwo.hValue = heuristicFunction(neighborOne, neighborTwo); 
                     neighborTwo.fValue = neighborOne.gValue + neighborTwo.hValue + neighborTwo.gValue; 
-                    neighborTwo.backWardNode = currentTwo; // Make the current node the parent node of this neighbor
+                    neighborTwo.backwardNode = currentTwo; 
+
+                    // Mark this second neighbor as visited by the backward search
+                    neighborTwo.backwardVisited = true;
                 }
             }
         }
     }
-    return {closedSetStart, openSetStartHistory, closedSetEnd, openSetEndHistory, currentOne, currentTwo}; // If there is no solution, return
+    return {closedSetStart, openSetStartHistory, closedSetEnd, openSetEndHistory, currentOne, currentTwo, currentPath}; // If there is no solution, return
 };
 
-// Helper function to return the shortest path found from AStar
+// Helper function to return the shortest forward path found from Bidirectional AStar
 export const getForwardBidrectionalAStarPath = (endNode) => {
     const nodesInShortestPathOrder = [];
     let currentNode = endNode;
@@ -141,12 +159,13 @@ export const getForwardBidrectionalAStarPath = (endNode) => {
     return nodesInShortestPathOrder;
 };
 
-export const getBackwardBidirectionalAstartPath = (endNode) => {
+// Helper function to return the shortest backward path found from Bidirectional AStar
+export const getBackwardBidirectionalAStarPath = (endNode) => {
     const nodesInShortestPathOrder = [];
     let currentNode = endNode;
     while (currentNode) {
         nodesInShortestPathOrder.unshift(currentNode);
-        currentNode = currentNode.backWardNode;
+        currentNode = currentNode.backwardNode;
     }
     return nodesInShortestPathOrder;
 };

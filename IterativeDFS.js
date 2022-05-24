@@ -46,10 +46,11 @@ export const IterativeDFS = (grid, startNode, endNode) => {
                     // Push this neighbor to the stack
                     stack.push(neighbor); 
                     stackHistory.push(neighbor);
+
+                    // Make the current node the parent of this neigbor
+                    neighbor.previousNode = currentNode;
                 }
             }
-            // Make the current node the parent of this neigbor
-            neighbor.previousNode = currentNode;
         }
     }
     return {stack, stackHistory}; // If there is no solution, return the stack

@@ -18,14 +18,20 @@ export const Dijkstra = (grid, startNode, endNode) => {
             continue; // Skip this wall
         }
 
-        // If the closest node has a distance of infinity then we are trapped and need to stop
+        // If the closest node has a distance of infinity
         if (currentNode.distance === Infinity) {
-            return dijkstraVisitedNodes; // Return the list of visited nodes
+            // The search is trapped, return the list of visited nodes
+            return dijkstraVisitedNodes; 
         }
 
         // Mark the current node as visited and push this current node to the list of visited nodes
         currentNode.hasBeenVisited = true; 
         dijkstraVisitedNodes.push(currentNode);
+        
+        // If the current node is the end node
+        if (currentNode === endNode) {
+            return dijkstraVisitedNodes; // Return the list of visited nodes
+        }
         
         // Find neighbors of the current node that have not yet been visited
         const unvisitedNeighbors = getUnvisitedNeighbors(grid, currentNode);
@@ -35,16 +41,12 @@ export const Dijkstra = (grid, startNode, endNode) => {
             // Length of the path from the root node to this neighbor if it were to go through the current node
             const alternativePath = currentNode.distance + getEuclideanDistance(currentNode, neighbor); 
             
-            // If this alternative path is shorter than the current shortest path recorded for this neighbor, then that path is replaced with the alternative path.
+            // If this alternative path is shorter than the current shortest path recorded for this neighbor
             if (alternativePath < neighbor.distance) {
+                // Replace the current shortest path for this neighbor with the alternative path and make the curernt node the parent of this neighbor
                 neighbor.distance = alternativePath;
-                neighbor.previousNode = currentNode; // Make the current node the parent of this neighbor
+                neighbor.previousNode = currentNode; 
             }
-        }
-
-        // If the current node is the end node
-        if (currentNode === endNode) {
-            return dijkstraVisitedNodes; // Return the list of visited nodes
         }
     }
 };

@@ -5,7 +5,7 @@ width: 25px;
 height: 25px; 
 */
 .node {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 1.0);
     width: 15px;
     height: 15px;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -14,15 +14,15 @@ height: 25px;
 }
 
 .node-start {
-    background-color: rgb(0, 255, 0);
+    background-color: rgba(0, 255, 0, 1.0);
 }
 
 .node-end {
-    background-color: rgb(255, 0, 0);
+    background-color: rgba(255, 0, 0, 1.0);
 }
 
 .node-wall {
-    background-color: rgb(30, 50, 70);
+    background-color: rgba(30, 50, 70, 1.0);
 }
 
 .node-visited {
@@ -49,12 +49,12 @@ height: 25px;
 
     75% {
         transform: scale(1.2);
-        background-color: rgba(0, 200, 255, 0.75);
+        background-color: rgba(0, 255, 200, 0.75);
     }
 
     100% {
         transform: scale(1);
-        background-color: rgba(0, 255, 200, 0.75);
+        background-color: rgba(0, 200, 255, 0.75);
     }
 }
 
