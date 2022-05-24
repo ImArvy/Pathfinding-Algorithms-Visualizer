@@ -439,6 +439,7 @@ export default class PathfindingVisualizers extends Component {
         } 
     }
 
+    // Visualize Dijkstra's Algorithm
     visualizeDijkstraAlgorithm() {
         const {grid} = this.state;
         const startNode = grid[startNodeRow][startNodeColumn];

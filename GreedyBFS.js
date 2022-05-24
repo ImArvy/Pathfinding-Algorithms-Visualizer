@@ -39,12 +39,16 @@ export const GreedyBFS = (grid, startNode, endNode) => {
             if (closedSet.includes(neighbor) === false) { 
                 // If this neighbor is the end node
                 if (neighbor === endNode) {
-                    // Make the current node the parent node of this neighbor and push this neighbor to the open set and closed set
+                    // Make the current node the parent node of this neighbor
                     neighbor.previousNode = currentNode; 
+                    
+                    // Push this neighbor to the open set
                     openSet.push(neighbor);
                     openSetHistory.push(neighbor);
+
+                    // Push this neighbor to the closed set
                     closedSet.push(neighbor);
-                    
+
                     // Return the closed and open sets
                     return {closedSet, openSetHistory}; 
                 }
@@ -56,8 +60,9 @@ export const GreedyBFS = (grid, startNode, endNode) => {
 
                 // Set the temporary hValue to be the heuristic distance to the end node and initialize newPathFound to false
                 const tempHValue = heuristicFunction(neighbor, endNode); 
+               
+                // Find out if we have a better path than before
                 let newPathFound = false;
-                
                 // If this neighbor is in the open set
                 if (openSet.includes(neighbor) === true) { 
                     // If the temporary hValue is less than this neighbor's hValue

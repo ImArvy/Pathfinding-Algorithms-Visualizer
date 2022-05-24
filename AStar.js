@@ -84,22 +84,6 @@ export const AStar = (grid, startNode, endNode) => {
                     neighbor.fValue = neighbor.gValue + neighbor.hValue; // Compute the neighbor's fValue
                     neighbor.previousNode = currentNode; // Make the current node the parent node of this neighbor
                 }
-
-                // If this neighbor is the end node
-                if (neighbor === endNode) {
-                    // Make the current node the parent node of this neighbor
-                    neighbor.previousNode = currentNode; 
-                    
-                    // Push this neighbor to the open set
-                    openSet.push(neighbor);
-                    openSetHistory.push(neighbor);
-
-                    // Push this neighbor to the closed set
-                    closedSet.push(neighbor);
-
-                    // Return the closed and open sets
-                    return {closedSet, openSetHistory}; 
-                }
             }
         }
     }

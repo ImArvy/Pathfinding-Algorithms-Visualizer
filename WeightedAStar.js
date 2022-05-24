@@ -40,12 +40,16 @@ export const WeightedAStar = (grid, startNode, endNode) => {
             if (closedSet.includes(neighbor) === false) { 
                 // If this neighbor is the end node
                 if (neighbor === endNode) {
-                    // Make the current node the parent node of this neighbor and push this neighbor to the open set and closed set
+                    // Make the current node the parent node of this neighbor
                     neighbor.previousNode = currentNode; 
+                    
+                    // Push this neighbor to the open set
                     openSet.push(neighbor);
                     openSetHistory.push(neighbor);
+
+                    // Push this neighbor to the closed set
                     closedSet.push(neighbor);
-                    
+
                     // Return the closed and open sets
                     return {closedSet, openSetHistory}; 
                 }
@@ -55,19 +59,23 @@ export const WeightedAStar = (grid, startNode, endNode) => {
                     continue; // Skip this wall
                 }
 
-                let tempGValue = currentNode.gValue + heuristicFunction(neighbor, currentNode); // Set the temporary gValue
+                const tempGValue = currentNode.gValue + heuristicFunction(neighbor, currentNode); // Set the temporary gValue
 
                 // Find out if we have a better path than before
                 let newPathFound = false;
-                if (openSet.includes(neighbor) === true) { // If the neighbor is in the open set
+                // If the neighbor is in the open set
+                if (openSet.includes(neighbor) === true) { 
                     if (tempGValue < neighbor.gValue) { // If the temporary gValue is less than the neighbor's gValue
                         neighbor.gValue = tempGValue; // Assign the temporary gValue to the neighbor's gValue
                         newPathFound = true; // We have found a new path
                     }
-                } else { // Otherwise
+                // If the neighbor is not in the open set
+                } else { 
                     neighbor.gValue = tempGValue; // Assign the temporary gValue to the neighbor's gValue
                     newPathFound = true; // We have found a new path
-                    openSet.push(neighbor); // Push this neighbor to the open set
+                    
+                    // Push this neighbor to the open set
+                    openSet.push(neighbor); 
                     openSetHistory.push(neighbor);
                 }
 
@@ -77,9 +85,9 @@ export const WeightedAStar = (grid, startNode, endNode) => {
                     neighbor.previousNode = currentNode; // Make the current node the parent node of this neighbor
 
                     /*
-                    Weight of 0 means Dijkstra's Algorithm 
-                    Weight of infinity means Greedy Best First Search
-                    Weight of 1.0 means A*
+                    Weight of 0 => Dijkstra's Algorithm 
+                    Weight of infinity => Greedy Best First Search
+                    Weight of 1.0 => A*
                     Weighted A* is between A* and Greedy Best First Search => between 1.0 and infinity
                     */
                     //neighbor.fValue = neighbor.gValue + weight * neighbor.hValue;
