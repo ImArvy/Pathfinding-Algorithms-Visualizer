@@ -18,4 +18,4 @@ Some useful information about the project:
 
 5) That is about it! Just click one of the pathfinding algorithm buttons above the grid and watch the animated search for the end node. Upon completion of the search a yellow line of nodes will be drawn to signify the path found, in some cases this will be the first path to the end node and in others the shortest path. This is of course entirely dependent on the optimality of each algorithm. There does exist the possibility of not finding the end node, for example Greedy BFS may never find the end node as it is not complete as a pathfinding algorithm. Another case would be adding walls using "Add Walls", since it is random there exists the possibility that the walls trap the search from the start node or block the end node from being reached. My implemenation of these algorithms accounts for these cases and will terminate if there is no route to the end node.
 
-https://pathfinding-visualizers.herokuapp.com/
+https://pathfinding-algo-visualizer.herokuapp.com/
